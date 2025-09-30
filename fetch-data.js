@@ -1,33 +1,28 @@
-@"
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 20px;
-  background-color: #f4f4f4;
+async function fetchUserData() {
+    const apiUrl = 'https://jsonplaceholder.typicode.com/users';
+    const dataContainer = document.getElementById('api-data');
+
+    try {
+        const response = await fetch(apiUrl);
+        const users = await response.json();
+
+        // Clear the loading message
+        dataContainer.innerHTML = '';
+
+        // Create and append list of users
+        const userList = document.createElement('ul');
+        users.forEach(user => {
+            const li = document.createElement('li');
+            li.textContent = user.name;
+            userList.appendChild(li);
+        });
+
+        dataContainer.appendChild(userList);
+    } catch (error) {
+        dataContainer.innerHTML = 'Failed to load user data.';
+        console.error('Error fetching data:', error);
+    }
 }
 
-#content {
-  max-width: 600px;
-  margin: auto;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+document.addEventListener('DOMContentLoaded', fetchUserData);
 
-h1 {
-  text-align: center;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-li {
-  background-color: #eee;
-  margin: 8px 0;
-  padding: 10px;
-  border-radius: 4px;
-}
-"@ | Out-File -Encoding utf8 fetch-data.css
